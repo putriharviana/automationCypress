@@ -59,7 +59,7 @@ describe("Dashboard Page Test Cases", ()=> {
             }
         ];
         
-        cy.request('https://randomuser.me/api/?results=2').then((response) => {
+        cy.request('https://randomuser.me/api/?results=4').then((response) => {
             expect(response.status).to.eq(200)
             console.log(response.body.results)
             
@@ -76,8 +76,8 @@ describe("Dashboard Page Test Cases", ()=> {
                 cy.get("img").should("have.attr", "src", picture.large);
                 cy.contains(name.title + ' ' + name.first + ' ' + name.last);
             })
+            
+            cy.contains(`Found ${response.body.results.length} photos`); //String "Found x photos"
         })
-
-        cy.contains(`Found ${photos.length} photos`); //String "Found x photos"
     })
 })
