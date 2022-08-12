@@ -58,19 +58,24 @@ describe("Dashboard Page Test Cases", ()=> {
                 descriptionValue: "Image 2 : Lorem Ipsum",
             }
         ];
-
-        photos.forEach(({imageValue, descriptionValue})=> {
-            const imageUrl = cy.get("input[name='image']");
-            imageUrl.type(imageValue);
-
-            const description = cy.get("input[name='desc']");
-            description.type(descriptionValue);
+        
+        cy.request('https://randomuser.me/api/?results=2').then((response) => {
+            expect(response.status).to.eq(200)
+            console.log(response.body.results)
             
-            const button = cy.get("button").should("have.attr", "type", "submit");
-            button.click();
+            response.body.results.forEach(({name, picture})=> {
+                const imageUrl = cy.get("input[name='image']");
+                imageUrl.type(picture.large);
 
-            cy.get("img").should("have.attr", "src", imageValue);
-            cy.contains(descriptionValue);
+                const description = cy.get("input[name='desc']");
+                description.type(name.title + ' ' + name.first + ' ' + name.last);
+                
+                const button = cy.get("button").should("have.attr", "type", "submit");
+                button.click();
+
+                cy.get("img").should("have.attr", "src", picture.large);
+                cy.contains(name.title + ' ' + name.first + ' ' + name.last);
+            })
         })
 
         cy.contains(`Found ${photos.length} photos`); //String "Found x photos"
