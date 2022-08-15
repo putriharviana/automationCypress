@@ -31,17 +31,22 @@ describe ("Login page test cases", () => {
     })
 
     it("Do login with wrong value", () => {
-        const email = cy.get("input[name='email']");
-        email.type("testingemailerror@react.test");
-        
-        const password = cy.get("input[name='password']");
-        password.type("Password");
-        
-        const button = cy.get("button").should("have.attr", "type", "submit");
-        button.click();
-        
-        cy.on("window:alert", (text) => {
-            expect(text).to.contains("login failed");
+        cy.request('https://jsonplaceholder.typicode.com/users/1').then((response) => {
+            expect(response.status).to.eq(200)
+            console.log(response)
+            
+            const email = cy.get("input[name='email']");
+            email.type(response.body.email);
+            
+            const password = cy.get("input[name='password']");
+            password.type(response.body.address.city);
+            
+            const button = cy.get("button").should("have.attr", "type", "submit");
+            button.click();
+            
+            cy.on("window:alert", (text) => {
+                expect(text).to.contains("login failed");
+            })
         })
     })
 

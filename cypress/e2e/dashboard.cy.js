@@ -46,18 +46,18 @@ describe("Dashboard Page Test Cases", ()=> {
     })
 
     it("Upload some photos", ()=> {
-        const photos = [
-            {
-                imageValue:
-                    "https://images.unsplash.com/photo-1660092627183-8963c9c985c6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80",
-                descriptionValue: "Image 1 : Lorem Ipsum",
-            },
-            {
-                imageValue:
-                    "https://images.unsplash.com/photo-1660065079192-71368822b175?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80",
-                descriptionValue: "Image 2 : Lorem Ipsum",
-            }
-        ];
+        // const photos = [
+        //     {
+        //         imageValue:
+        //             "https://images.unsplash.com/photo-1660092627183-8963c9c985c6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80",
+        //         descriptionValue: "Image 1 : Lorem Ipsum",
+        //     },
+        //     {
+        //         imageValue:
+        //             "https://images.unsplash.com/photo-1660065079192-71368822b175?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80",
+        //         descriptionValue: "Image 2 : Lorem Ipsum",
+        //     }
+        // ];
         
         cy.request('https://randomuser.me/api/?results=4').then((response) => {
             expect(response.status).to.eq(200)
