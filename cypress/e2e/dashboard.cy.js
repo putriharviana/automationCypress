@@ -59,25 +59,43 @@ describe("Dashboard Page Test Cases", ()=> {
         //     }
         // ];
         
-        cy.request('https://randomuser.me/api/?results=4').then((response) => {
-            expect(response.status).to.eq(200)
-            console.log(response.body.results)
+        // cy.request('https://randomuser.me/api/?results=4').then((response) => {
+        //     expect(response.status).to.eq(200)
+        //     console.log(response.body.results)
             
-            response.body.results.forEach(({name, picture})=> {
-                const imageUrl = cy.get("input[name='image']");
-                imageUrl.type(picture.large);
+        //     response.body.results.forEach(({name, picture})=> {
+        //         const imageUrl = cy.get("input[name='image']");
+        //         imageUrl.type(picture.large);
 
-                const description = cy.get("input[name='desc']");
-                description.type(name.title + ' ' + name.first + ' ' + name.last);
+        //         const description = cy.get("input[name='desc']");
+        //         description.type(name.title + ' ' + name.first + ' ' + name.last);
                 
-                const button = cy.get("button").should("have.attr", "type", "submit");
-                button.click();
+        //         const button = cy.get("button").should("have.attr", "type", "submit");
+        //         button.click();
 
-                cy.get("img").should("have.attr", "src", picture.large);
-                cy.contains(name.title + ' ' + name.first + ' ' + name.last);
-            })
+        //         cy.get("img").should("have.attr", "src", picture.large);
+        //         cy.contains(name.title + ' ' + name.first + ' ' + name.last);
+        //     })
             
-            cy.contains(`Found ${response.body.results.length} photos`); //String "Found x photos"
+        //     cy.contains(`Found ${response.body.results.length} photos`); //String "Found x photos"
+        // })
+
+
+        cy.request('https://randomuser.me/api/?results=4').then((response) => {
+            // expect(response.status).to.eq(200)
+            // console.log(response.body.results)
+            
+            var officersIds = response.body.results.map(function (officer) {
+                return officer.picture.large
+            });
+            const obj = Object.assign({}, officersIds)
+            console.log(obj)
+
+            let i;
+            for (i=0; i<=officersIds.length; i++){
+                const imageUrl = cy.get("input[name='image']");
+                imageUrl.type(obj);
+            }
         })
     })
 })
