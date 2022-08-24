@@ -45,57 +45,79 @@ describe("Dashboard Page Test Cases", ()=> {
         button.should("have.css", "background-color", "rgb(79, 70, 229)")
     })
 
-    it("Upload some photos", ()=> {
-        // const photos = [
-        //     {
-        //         imageValue:
-        //             "https://images.unsplash.com/photo-1660092627183-8963c9c985c6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80",
-        //         descriptionValue: "Image 1 : Lorem Ipsum",
-        //     },
-        //     {
-        //         imageValue:
-        //             "https://images.unsplash.com/photo-1660065079192-71368822b175?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80",
-        //         descriptionValue: "Image 2 : Lorem Ipsum",
-        //     }
-        // ];
-        
-        // cy.request('https://randomuser.me/api/?results=4').then((response) => {
-        //     expect(response.status).to.eq(200)
-        //     console.log(response.body.results)
-            
-        //     response.body.results.forEach(({name, picture})=> {
-        //         const imageUrl = cy.get("input[name='image']");
-        //         imageUrl.type(picture.large);
+    it("Upload some photos(1)", ()=> {
+        cy.request('https://jsonplaceholder.typicode.com/photos?albumId=1').then((response) => {
+            expect(response.status).to.eq(200)
+            console.log(response.body)
 
-        //         const description = cy.get("input[name='desc']");
-        //         description.type(name.title + ' ' + name.first + ' ' + name.last);
-                
-        //         const button = cy.get("button").should("have.attr", "type", "submit");
-        //         button.click();
-
-        //         cy.get("img").should("have.attr", "src", picture.large);
-        //         cy.contains(name.title + ' ' + name.first + ' ' + name.last);
-        //     })
-            
-        //     cy.contains(`Found ${response.body.results.length} photos`); //String "Found x photos"
-        // })
-
-
-        cy.request('https://randomuser.me/api/?results=4').then((response) => {
-            // expect(response.status).to.eq(200)
-            // console.log(response.body.results)
-            
-            var officersIds = response.body.results.map(function (officer) {
-                return officer.picture.large
-            });
-            const obj = Object.assign({}, officersIds)
-            console.log(obj)
-
-            let i;
-            for (i=0; i<=officersIds.length; i++){
+            response.body.forEach(({url, title})=> {
                 const imageUrl = cy.get("input[name='image']");
-                imageUrl.type(obj);
+                imageUrl.type(url);
+
+                const description = cy.get("input[name='desc']");
+                description.type(title);
+                
+                const button = cy.get("button").should("have.attr", "type", "submit");
+                button.click();
+
+                cy.get("img").should("have.attr", "src", url);
+                cy.contains(title);
+            })
+        })
+    })
+
+    it("Upload some photos(2)", ()=> {
+        const photos = [
+            {
+                imageValue:
+                    "https://images.unsplash.com/photo-1660092627183-8963c9c985c6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80",
+                descriptionValue: "Image 1 : Lorem Ipsum",
+            },
+            {
+                imageValue:
+                    "https://images.unsplash.com/photo-1660065079192-71368822b175?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80",
+                descriptionValue: "Image 2 : Lorem Ipsum",
             }
+        ];
+        
+        photos.forEach(({imageValue, descriptionValue})=> {
+            const imageUrl = cy.get("input[name='image']");
+            imageUrl.type(imageValue);
+
+            const description = cy.get("input[name='desc']");
+            description.type(descriptionValue);
+            
+            const button = cy.get("button").should("have.attr", "type", "submit");
+            button.click();
+
+            cy.get("img").should("have.attr", "src", imageValue);
+            cy.contains(descriptionValue);
+        })
+    })
+
+    it("Upload some photos(3)", ()=> {
+        cy.request('https://randomuser.me/api/?results=4').then((response) => {
+            expect(response.status).to.eq(200)
+            console.log(response.body.results)
+            
+            const photos = response.body.results.map( resultImage => ({
+                imageValue: resultImage.picture.large,
+                descriptionValue: `${ resultImage.name.first } ${ resultImage.name.last }`
+            }));
+            
+            photos.forEach(({imageValue, descriptionValue})=> {
+                const imageUrl = cy.get("input[name='image']");
+                imageUrl.type(imageValue);
+
+                const description = cy.get("input[name='desc']");
+                description.type(descriptionValue);
+                
+                const button = cy.get("button").should("have.attr", "type", "submit");
+                button.click();
+
+                cy.get("img").should("have.attr", "src", imageValue);
+                cy.contains(descriptionValue);
+            })
         })
     })
 })
